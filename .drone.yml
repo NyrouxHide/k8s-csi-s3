@@ -1,24 +1,6 @@
-kind: pipeline
-name: default
-
-steps:
-- name: test
-  image: docker:dind
-  volumes:
-  - name: dockersock
-    path: /var/run
-  commands:
-  - sleep 5 # give docker enough time to start
-  - docker ps -a
-
-services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
-
-volumes:
-- name: dockersock
-  temp: {}
+kind: template
+load: test.yaml
+data:
+  name: my-stage
+  image: alpine
+  commands: cat /etc/-os-release
