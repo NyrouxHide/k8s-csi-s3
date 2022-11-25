@@ -1,6 +1,2 @@
 kind: template
 load: test.yaml
-data:
-  name: my-stage
-  image: alpine
-  commands: cat /etc/-os-release
