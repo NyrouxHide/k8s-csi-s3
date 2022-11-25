@@ -3,14 +3,26 @@ type: docker
 name: default
 
 steps:
-- name: backend
-  image: golang
-  commands:
-  - go build
-  - go test
+  - name: build
+    image: docker:dind
+    volumes:
+      - name: dockersock
+        path: /var/run
+    environment:
+      DOCKER_PASSWORD:
+        from_secret: docker_password
+    commands:
+      - sleep 5 # give docker enough time to start
+      - docker build -t docker.io/nyroux/image:latest .
 
-- name: frontend
-  image: node
-  commands:
-  - npm install
-  - npm run test
+services:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
+volumes:
+  - name: dockersock
+    temp: {}
